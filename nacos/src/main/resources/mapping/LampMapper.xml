@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.LampMapper">
+    <sql id="Base_Column_List_lampCheck" >
+        p.pole_id, p.pole_code, p.county_id, p.road_id, p.gps_code, p.spc_id, p.spc_code, p.k_code, p.area_id,
+        p.gps_lon, p.gps_lat, p.amap_lon, p.amap_lat, p.lonlat, p.s_position, p.pole_type, p.light_type,
+        p.lamp_power, p.pole_height, p.mng_id, p.light_info, p.apply_name, p.purchase_dt, p.near_pic, p.far_pic,
+        p.label_pic, p.label_size, p.pic_code, p.thmn_pic, p.pole_status, p.office_id, p.principal_id,
+        p.create_time, p.update_time, p.destroy_time, p.recycle, p.status, p.edit_log, p.check_status,
+        p.check_user, p.last_repair, p.last_replace, p.remark
+    </sql>
+    <sql id="Base_Column_List_User">
+      user_id,user_name,password,hobby
+    </sql>
+    <resultMap id="LampConditionAndNumBo" type="com.example.demo.bo.LampConditionAndNumBo">
+        <result property="conditionName" column="conditionName" ></result>
+        <result property="lampCount" column="lampCount"></result>
+    </resultMap>
+
+    <select id="selectCountyNumByLamp" resultMap="LampConditionAndNumBo">
+        SELECT (c.county_name) AS conditionName,(SELECT COUNT(p.county_id) FROM lamp_pole p WHERE p.county_id = c.county_id) AS lampCount
+        FROM lamp_county c
+
+    </select>
+
+    <update id="createTable" parameterType="String">
+        CREATE TABLE ${tableName} (
+                                      `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '编号',
+                                      `user_name` varchar(50) DEFAULT NULL COMMENT '用户名',
+                                      `operation` varchar(50) DEFAULT NULL COMMENT '用户操作',
+                                      `method` varchar(200) DEFAULT NULL COMMENT '请求方法',
+                                      `params` varchar(5000) DEFAULT NULL COMMENT '请求参数',
+                                      `time` bigint(20) NOT NULL COMMENT '执行时长(毫秒)',
+                                      `ip` varchar(64) DEFAULT NULL COMMENT 'IP地址',
+                                      PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户操作日志';
+    </update>
+
+    <select id="existTable" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select COUNT(*) from  information_schema.`TABLES` where table_name = #{tableName}
+    </select>
+
+    <select id="selectPoleById" parameterType="java.lang.Long" resultType="com.example.demo.pojo.LampPole">
+        SELECT * FROM lamp_pole where pole_id = #{poleId,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insertUser" parameterType="com.example.demo.pojo.User" useGeneratedKeys="true" keyProperty="userId">
+        insert into user_g (user_name,password,hobby) values (#{userName},#{password},#{hobby});
+    </insert>
+
+    <select id="getUser" parameterType="java.lang.String" resultType="com.example.demo.pojo.User">
+        select
+        <include refid="Base_Column_List_User" />
+        from user_g
+        where user_name = #{userName} and password = #{password}
+    </select>
+
+    <select id="getUserIsExist" parameterType="java.lang.String" resultType="com.example.demo.pojo.User">
+        select
+        <include refid="Base_Column_List_User" />
+        from user_g
+        where user_name = #{userName}
+    </select>
+</mapper>

@@ -1,0 +1,19 @@
+{
+  "data": [
+    {
+      "name": "cc",
+      "sex": "男",
+      "email": "cc@123.com"
+    },
+    {
+      "name": "bb",
+      "sex": "男",
+      "email": "bb@123.com"
+    },
+    {
+      "name": "aa",
+      "sex": "女",
+      "email": "aa@123.com"
+    }
+  ]
+}

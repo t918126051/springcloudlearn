@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_1508807_616jxsktncl.css"/>
+<link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
+<link th:href="@{/lib/layui/css/layui.css}" rel="stylesheet" type="text/css" />
+<link th:href="@{/css/common/my-layui.css}" rel="stylesheet" type="text/css" />
+<head>
+    <title>灯杆按行政区域统计</title>
+    <style>
+        .noticetitle:hover{
+            color:lightskyblue;
+        }
+        /*.picChart{*/
+        /*width:calc(100%);*/
+        /*height:calc(100%);*/
+        /*}*/
+        .icon-laba{
+            color: #ed0849;
+        }
+        .icon-laba:hover{
+            color: #87ddff;
+        }
+        .zChart1:hover{
+            color: #c7254e !important;
+        }
+        .bChart1:hover{
+            color: #c7254e !important;
+        }
+        .zxChart1:hover{
+            color: #c7254e !important;
+        }
+        .input-card {
+            width: 25rem;
+        }
+
+        .input-card .btn {
+            width: 7rem;
+            margin-right: .7rem;
+        }
+
+        .input-card .btn:last-child {
+            margin-right: 0;
+        }
+        #container{
+            width:100%;
+            height:100%;
+        }
+        .layui-table-view{
+            margin:0;
+        }
+        /*.layui-table{*/
+        /*background-color: #29b2ff; !* MediumSeaGreen *!*/
+        /*color: #fff;*/
+        /*font-weight: bold*/
+        /*}*/
+    </style>
+</head>
+<body>
+
+<div class="contentBox" style="width:100%;height:600px">
+    <ul class="index_content_box" style="width:100%;height:100%">
+        <li class="index_subbox" style="width:100%;height:100%">
+            <h5 style="height: 38px;padding:0px;margin: 0px;">
+                <div class="layui-form-item " style="width:1000px;height:22px;float:left;">
+                    <form class="layui-form" action="" style="width:100%;height:100%;">
+                        <input type="hidden" name="statisId" id="statisId" th:value="${statisId}">
+                        <input type="hidden" name="tableNameCn" id="tableNameCn" th:value="${tableNameCn}">
+                        <div class="layui-form-item " style="float:left;width:800px;" >
+                            <label class="layui-form-label" style="width:100px;margin:auto;color:rgb(179,179,179)">统计方式</label>
+                            <div class="layui-input-inline" style="width:100px;border: 0;line-height: 40px;" id="jselect">
+                                <select name="fieldName" style="width: 100%;border: 0;" lay-filter="getfieldName" id="getfieldName">
+                                </select>
+                            </div>
+                            <label class="layui-form-label" style="width:100px;margin:auto;color:rgb(179,179,179)">统计展示</label>
+                            <div class="layui-input-inline" style="width:100px;border: 0;line-height: 40px;" id="jstatis">
+                                <select name="statisName" style="width: 100%;border: 0;" lay-filter="getstatis" id="getstatis">
+                                    <option  class="zChart1"   value="柱状图">柱状图</option>
+                                    <option  class="bChart1"   value="饼状图">饼状图 </option>
+                                    <option  class="zxChart1"  value="折线图">折线图</option>
+                                    <option  class="tabChart1" value="统计表">统计表</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </h5>
+            <!--<input type="hidden" id="urls" th:each="men : ${menu}"  th:if="${men.url} ne null" th:value="${men.url}">-->
+            <div class="unitDiv shortDiv zshortDiv1" style="width:100%;height:100%;" >
+                <div class="innDiv" style="width:100%;height:100%">
+                    <div id="Histogram" class="picChart" style="height:100%;width:100%;"></div>
+                </div>
+            </div>
+            <div class="unitDiv shortDiv bshortDiv1 " style="width:100%;height:100%;display:none;">
+                <div class="innDiv" style="width:100%;height:100%">
+                    <div id="LineBiagram" class="picChart LinepicChart" style="height:100%;width:100%;"></div>
+                </div>
+            </div>
+            <div class="unitDiv shortDiv zxshortDiv1" style="width:100%;height:100%;display:none;">
+                <div class="innDiv" style="width:100%;height:100%">
+                    <div id="BrokenLineBiagram" class="picChart BrokenpicChart" style="height:100%;width:100%;"></div>
+                </div>
+            </div>
+            <div class="unitDiv shortDiv tabshortDiv1" style="width:100%;height:100%;display:none; margin-top:0">
+                <div class="innDiv" style="width:100%;height:100%">
+                    <div id="TableBiagram" class="picChart" style="height:100%;width:100%;margin:0">
+                        <table id="table_sta" lay-filter="table_sta" class="layui-table" style="margin:0;"></table>
+                        <!--数据统计配置头工具栏模板-->
+                        <script type="text/html" id="toolbar_sta">
+                            <div class="layui-btn-container">
+                                <button type="button" lay-submit="" lay-event="export_execl" class="layui-btn layui-btn-warm" id="exportExcel">
+                                    <i class="layui-icon"></i>导出Excel</button>
+                            </div>
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="unitDiv shortDiv SMap" style="width:100%;height:100%;display:none;">-->
+                <!--<div class="innDiv" style="width:100%;height:100%">-->
+                    <!--<div id="StatisMap" class="picChart" style="height:100%;width:100%;">-->
+                        <!--<div id="container" class="map" tabindex="0"></div>-->
+                        <!--<div class="input-card">-->
+                            <!--<h4>聚合点效果切换</h4>-->
+                            <!--<div class="input-item">-->
+                                <!--<input type="button" class="btn" value="默认样式" id="add0" onclick='addCluster(0)'/>-->
+                                <!--<input type="button" class="btn" value="自定义图标" id="add1" onclick='addCluster(1)'/>-->
+                                <!--<input type="button" class="btn" value="完全自定义" id="add2" onclick='addCluster(2)'/>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div  th:replace="statistest/ptyleField :: html"></div>-->
+        </li>
+    </ul>
+</div>
+
+
+
+<script type="text/javascript"  th:src="@{/lib/layui/layui.js}"></script>
+<!-- 引入echart -->
+<script th:src="@{/lib/echarts/echarts.js}" type="text/javascript" charset="utf-8"></script>
+<!-- 引入echart主题 -->
+<script th:src="@{/lib/echarts/walden.js}" type="text/javascript" charset="utf-8"></script>
+
+<script src="//a.amap.com/jsapi_demos/static/china.js"></script>
+<script src="//webapi.amap.com/maps?v=1.4.15&key=ffc94953318286cf2631a50d379c171c"></script>
+<script th:src="@{/lib/jquery/jquery-3.4.1.min.js}"></script>
+<script th:src="@{/lib/excel/jquery.table2excel.js}"></script>
+<script th:src="@{/lib/excel/excel.js}"></script>
+<script th:src="@{/js/display/stat_display.js}"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body, html{
+            width: 100%;
+            height: 100%;
+        }
+        #main {
+            width: 60%;
+            height: 40%;
+        }
+    </style>
+    <script type="text/javascript" src="../../static/js/jquery.1.10.2.min.js"></script>
+    <script type="text/javascript" src="../../static/js/echarts.min.js"></script>
+    <script type="text/javascript" src="../../static/js/compent/pack.ajax.js"></script>
+</head>
+<body>
+    <div id="main" >
+
+    </div>
+    <script type="text/javascript">
+        let myChart = echarts.init(document.getElementById('main'),'light');
+        let  a ;
+        let option = {
+            title: {
+                text: '路灯区域统计图',
+                borderColor: '#FF0000',       // 标题边框颜色
+                borderWidth: 1,
+                link:'hello.html'
+
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: "shadow"
+                },
+                // formatter:function (params) {
+                //     let res='<div><p>'+params[0].seriesName+':'+params[0].data+'</p></div>'
+                //     res+='<p>'+params[1].seriesName+':'+params[1].data+'</p>'
+                //     return res;
+                // }
+            },
+            toolbox: {
+                feature: {
+                    dataView: {show: true, readOnly: false},
+                    magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled'],title: {'line':'切换为折线图','bar':'切换为柱状图','stack':'切换为堆叠','tiled':'切换为平铺'}},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            gird:{
+                right:'10%'
+            },
+            legend: {
+                 data:['数量','百分比']
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: [],
+                    axisLabel: {
+                        interval:'0',
+                        //rotate:40
+                    }
+                },
+                // {
+                //     data:[],
+                //     axisLabel:{
+                //         interval:'0',
+                //         rotate:40,
+                //         offset:7,
+                //         position:'bottom'
+                //     }
+                // }
+                    ],
+            yAxis: [{
+                type: 'value',
+                name: '路灯数量',
+                min: 0,
+                position: 'left',
+                axisLine: {
+                    lineStyle: {
+                        color: '#d14a61'
+                    }
+                },
+                axisLabel: {
+                    formatter: '{value}盏'
+                }
+            },{
+                type: 'value',
+                name: '各区路灯所占百分比',
+                min: 0,
+                max: 100,
+                position: 'right',
+                axisLine: {
+                    lineStyle: {
+                        color: '#675bba'
+                    }
+                },
+                axisLabel: {
+                    formatter: '{value}%'
+                }
+
+
+        }],
+            series: [
+                {
+                    name: '数量',
+                    type: '',
+                    data: [],
+                },
+                {
+                    name:'百分比',
+                    type:'',
+                    yAxisIndex: 1,
+                    data:[],
+                    lineStyle:{
+                        color:'#FF0000'
+                    }
+
+                }
+            ]
+        }
+        myChart.showLoading();
+        $.ajax({
+            url:"/getStatistic",
+            type:"get",
+            success:function (res) {
+                let countyList  = Object.keys(res.data);
+                let countLamp = Object.values(res.data);
+                let totalLamp = countLamp.reduce(function (prev,n) {
+                    return prev+n;
+                },0);
+                let percentRateList = countLamp.map(function (n) {
+                    let point =  n / totalLamp
+                    let str=Number(point*100).toFixed(2);
+                    return  str;
+                });
+                a = totalLamp
+
+                option.xAxis[0].data = countyList
+                //option.xAxis[1].data = countLampContent
+                option.series[0].data = countLamp
+                option.series[1].data = percentRateList
+                myChart.hideLoading();
+                myChart.setOption(option);
+            }
+        });
+
+        // // 使用刚指定的配置项和数据显示图表。
+        // let path ;
+        // new Promise(function (resolve, reject){
+        //     $.ajax({
+        //         url:"/getStatistic",
+        //         type:"get",
+        //         success:function (res) {
+        //             if (res != null){
+        //                 resolve(res.data);
+        //                 console.log(res.data)
+        //                 let countyList  = Object.keys(res.data);
+        //                 let countLamp = Object.values(res.data);
+        //                 console.log(countyList)
+        //                 console.log(countLamp)
+        //
+        //             }else{
+        //                 reject("没有路径")
+        //             }
+        //         }
+        //     })
+        // }).then(function (res) {
+        //
+        // }).then(function () {
+        //     $.ajax({
+        //         type: "get",//请求方式
+        //         url: "/uploadJson/jsonFile/exampleWrite.json",//地址，就是json文件的请求路径
+        //         dataType: "json",//数据类型可以为 text xml json  script  jsonp
+        //         success: function(result){//返回的参数就是 action里面所有的有get和set方法的参数
+        //             console.log(result)
+        //         }
+        //     });
+        // });
+        function showStatisPic(data,type){
+            let myChart = echarts.init(document.getElementById('main'),'light');
+        }
+    </script>
+</body>
+
+</html>
