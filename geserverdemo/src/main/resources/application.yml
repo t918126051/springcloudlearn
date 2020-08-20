@@ -1,0 +1,11 @@
+#项目端口,7070是geoserver端口
+server:
+  port: 7071
+
+spring:
+  datagaea:
+    geoserver:
+      endpoint: http://127.0.0.1:7080/geoserver
+      username: admin
+      password: geoserver
+      workspacename: nycdata

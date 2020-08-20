@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -13,9 +13,9 @@
             height: 40%;
         }
     </style>
-    <script type="text/javascript" src="../../static/js/jquery.1.10.2.min.js"></script>
-    <script type="text/javascript" src="../../static/js/echarts.min.js"></script>
-    <script type="text/javascript" src="../../static/js/compent/pack.ajax.js"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.1.10.2.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/echarts.min.js}"></script>
+    <!--<script type="text/javascript" th:src="@{/js/compent/pack.ajax.js}"></script>-->
 </head>
 <body>
     <div id="main" >
@@ -55,7 +55,7 @@
                 right:'10%'
             },
             legend: {
-                 data:['数量','百分比']
+                 data:[]
             },
             xAxis: [
                 {
@@ -108,13 +108,11 @@
         }],
             series: [
                 {
-                    name: '数量',
-                    type: '',
+                    type: 'bar',
                     data: [],
                 },
                 {
-                    name:'百分比',
-                    type:'',
+                    type:'line',
                     yAxisIndex: 1,
                     data:[],
                     lineStyle:{
@@ -141,10 +139,16 @@
                 });
                 a = totalLamp
 
+                let arr=['数量','百分比']
                 option.xAxis[0].data = countyList
                 //option.xAxis[1].data = countLampContent
+                console.log( option.series.length)
                 option.series[0].data = countLamp
                 option.series[1].data = percentRateList
+                for (let i= 0 ; i < option.series.length; i++){
+                  option.series[i].name = arr[i]
+                }
+                option.legend.data = arr
                 myChart.hideLoading();
                 myChart.setOption(option);
             }

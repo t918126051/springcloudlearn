@@ -1,0 +1,5 @@
+server:
+  port: 7024
+
+
+helloworld: true

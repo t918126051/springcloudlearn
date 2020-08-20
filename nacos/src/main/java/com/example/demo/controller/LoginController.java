@@ -14,8 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class LoginController {
+    @RequestMapping("login")
+    public String login(){
+        return "login";
+    }
 
-    @RequestMapping("/login")
+    @RequestMapping("/user/login")
     public String login(Visitor user) {
         //添加用户认证信息
         Subject subject = SecurityUtils.getSubject();

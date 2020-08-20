@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Insert title here</title>
+</head>
+<body>
+<form action="/user/login" method="post">
+    <span style="background: red" id="msg"></span>
+    <input type="text" name="username" id="username"/>
+    <input type="password" name="password" id="password"/>
+    <button class="login" type="submit" value="submit">Submit</button>
+</form>
+<script type="text/javascript" src="../../js/jquery.1.10.2.min.js"></script>
+<script type="text/javascript">
+    $(".login").click(function () {
+        var userName = $("#username").val();
+        if (userName == '' || userName == null) {
+            alert("用户名输入不能为空");
+            return;
+        }
+
+        var password = $("#password").val();
+        if (password == '' || password == null) {
+            alert("密码输入不能为空");
+            return;
+        }
+    });
+
+</script>
+</body>
+</html>

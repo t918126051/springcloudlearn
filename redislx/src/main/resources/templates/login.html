@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/layui/css/layui.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/css/login.css}" rel="stylesheet" type="text/css"/>
+
+</head>
+<body>
+        <div clase="layui-lxcontent">
+            <div class="login-title">
+                <h3>登录</h3>
+            </div>
+            <div class="layui-form" >
+                <div class="layui-form-item">
+                    <label class="layui-form-label" >用户名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="username" placeholder="请输入" autocomplete="off" class="layui-input" id="uuserName">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" >密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" id="upassword" name="password" placeholder="请输入" autocomplete="off" class="layui-input" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="*" id="login">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary" id="clear">重置</button>
+                    </div>
+                </div>
+                <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+            </div>
+        </div>
+        <div>
+            <p th:text="${msg}" style="color: red"></p>
+        </div>
+</body>
+<script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/layui/layui.all.js}"></script>
+<script type="text/javascript" th:src="@{/use/login.js}"></script>
+</html>

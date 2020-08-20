@@ -1,0 +1,6 @@
+server:
+  port: 7033
+
+spring:
+  profiles:
+    active: validation

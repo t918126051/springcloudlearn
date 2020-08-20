@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>跨域测试</title>
+    <script th:src="@{/js/jquery.1.10.2.min.js}"></script>
+</head>
+<body>
+    <div id="hello"></div>
+</body>
+    <script>
+        $(function () {
+            $.get("http://test.zly.cc:7034/hello", function (data) {
+                $("#hello").text(data);
+            })
+        })
+    </script>
+</html>

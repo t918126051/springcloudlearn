@@ -1,0 +1,67 @@
+server:
+  port: 7030
+  servlet:
+    context-path: /web
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/lianxi?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: 123456
+    # 连接池配置
+    initial-size: 10
+    max-active: 100
+    min-idle: 10
+    # 连接等待超时时间
+    max-wait: 60000
+    # 配置检测可以关闭的空闲连接间隔时间
+    time-between-eviction-runs-millis: 60000
+    # 配置连接在池中的最小生存时间
+    min-evictable-idle-time-millis: 300000
+    validation-query: SELECT 1 FROM DUAL
+    test-while-idle: true
+    test-on-borrow: false
+    test-on-return: false
+    # 打开PSCache，并且指定每个连接上PSCache的大小
+    pool-prepared-statements: true
+    max-open-prepared-statements: 20
+    max-pool-prepared-statement-per-connection-size: 20
+    filter:
+      stat:
+        log-slow-sql: true
+        slow-sql-millis: 1000
+        merge-sql: true
+      wall:
+        config:
+          multi-statement-allow: true
+      allowMultiQuerie: true
+
+mybatis:
+  type-aliases-package: com.example.mybatisdemo.pojo
+  mapper-locations: classpath:mapper/*.xml
+
+
+## pagehelper分页插件
+pagehelper:
+  # 标识该插件是要针对哪一种数据库进行处理
+  helperDialect: mysql
+
+  # 分页合理化参数，
+  # 当该参数设置为 true 时，pageNum<=0 时会查询第一页， pageNum>pages（超过总数时），会查询最后一页。
+  # 设置为false时，如果pageNum<1或pageNum>pages会返回空数据
+  reasonable: true
+
+  # 1.支持通过 Mapper 接口参数来传递分页参数，List<Country> list = countryMapper.selectIf(1);
+  # 2.如果设置为true,若传入参数中有pageNum和pageSize两个参数，则会自动分页，不管有没有执行 PageHelper.startPage（）
+  supportMethodsArguments: true
+
+  # 为了支持startPage(Object params)方法，增加了该参数来配置参数映射，用于从对象中根据属性名取值，
+  # 可以配置为： pageNum,pageSize,count,pageSizeZero,reasonable，
+  # 若不配置，则使用默认值为：pageNum=pageNum;pageSize=pageSize;count=countSql;reasonable=reasonable;pageSizeZero=pageSizeZero
+  params: count=countSql
+logging:
+  level:
+    com:
+      example:
+        mybatisdemo:
+          mapper: info
